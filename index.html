@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>clifton.is</title>
+    <link href="/css/normalize.css" rel="stylesheet" type="text/css">
+    <link href="/css/highlight.github.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,700,400italic" rel="stylesheet" type="text/css">
+    <link href="/css/app.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div id="root">
+      <div class="container">
+        <div class="article-container">
+          <article>
+            <header>
+              <h1>Clifton King</h1>
+              <h2>All hat, no cattle</h2>
+            </header>
+            <h3>Where to find me</h3>
+            <p>
+              <ul class="social-links">
+                <li><a class="linkedin" href="http://www.linkedin.com/in/cliftonking"><i class="linkedin"></i>cliftonking</a></li>
+                <li><a class="twitter" href="http://twitter.com/cliftonk"><i class="twitter"></i>cliftonk</a></li>
+                <li><a class="github" href="http://github.com/clifton"><i class="github"></i>clifton</a></li>
+              </ul>
+            </p>
+            <h3>One of my favorite code things</h3>
+            <p><a href="https://github.com/swannodette">David Nolen</a>'s <code>core.logic</code> Sudoku Solver</p>
+            <pre><code class="clojure">
+(ns logic.sudoku
+  (:refer-clojure :exclude [==])
+  (:use [clojure.core.logic])
+  (:require [clojure.core.logic.fd :as fd]))
+
+(defn init-board [vars puzzle]
+  (matche [vars puzzle]
+          ([[] []]
+             succeed)
+          ([[_ . more-vars] [0 . more-puzzle]]
+             (init-board more-vars more-puzzle))
+          ([[num . more-vars] [num . more-puzzle]]
+             (init-board more-vars more-puzzle))))
+
+(defn solve [puzzle]
+  (let [sdnum (fd/domain 1 2 3 4 5 6 7 8 9)
+        board (repeatedly 81 lvar)
+        rows (into [] (map vec (partition 9 board)))
+        cols (apply map vector rows)
+        get-square (fn [x y]
+                     (for [x (range x (+ x 3))
+                           y (range y (+ y 3))]
+                       (get-in rows [x y])))
+        squares (for [x (range 0 9 3)
+                      y (range 0 9 3)]
+                  (get-square x y))]
+
+    (run* [q]
+          (== q board)
+          (everyg #(fd/in % sdnum) board)
+          (init-board board puzzle)
+          (everyg fd/distinct rows)
+          (everyg fd/distinct cols)
+          (everyg fd/distinct squares))))
+
+(def puzzle
+  [0 0 0 0 0 9 0 6 0
+   0 3 8 0 0 5 0 0 4
+   0 2 0 0 6 0 0 7 0
+   0 0 0 0 0 0 3 9 0
+   0 0 0 9 2 6 0 0 0
+   0 9 7 0 0 0 0 0 0
+   0 4 0 0 7 0 0 3 0
+   5 0 0 4 0 0 2 1 0
+   0 7 0 8 0 0 0 0 0])
+
+(solve puzzle)
+            </code></pre>
+            <!-- <p></p> -->
+            <!-- ]]<footer>Scribbled on February 4th, 2013</footer> -->
+          </article>
+        </div>
+        <footer>
+          <ul class="social-links">
+            <li><a class="linkedin" href="http://www.linkedin.com/in/cliftonking"><i class="linkedin"></i>cliftonking</a></li>
+            <li><a class="twitter" href="http://twitter.com/cliftonk"><i class="twitter"></i>cliftonk</a></li>
+            <li><a class="github" href="http://github.com/clifton"><i class="github"></i>clifton</a></li>
+          </ul>
+        </footer>
+      </div>
+    </div>
+    <script src="/js/highlight.js" type="text/javascript"></script><script src="/js/app.js" type="text/javascript"></script>
+  </body>
+</html>
