@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:////home/clifton/code/bets/src/pages/404.tsx"],"names":[],"mappings":"yFAAA,2BAEe,4BACb,6BACE","file":"templates/__react_static_root__/src/pages/404.tsx.8ac97a80.js","sourcesContent":["import React from 'react'\n\nexport default () => (\n  <div>\n    <h1>404 - Oh no's! We couldn't find that page :(</h1>\n  </div>\n)\n"],"sourceRoot":""}
